@@ -2,16 +2,17 @@ package org.example.apptienditatxt.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventTarget;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import org.example.apptienditatxt.dao.ProductsDao;
 import org.example.apptienditatxt.model.Product;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static org.example.apptienditatxt.utils.UserMessage.userInput;
 
 public class MainViewController {
 
@@ -19,24 +20,41 @@ public class MainViewController {
 	public ListView productsListView;
 
 	ProductsDao productsDao = new ProductsDao();
-	ObservableList<String> products = FXCollections.observableArrayList();
+	ObservableList<HBox> interactiveElements = FXCollections.observableArrayList();
 
 
 	@FXML
 	private void insertProductList() throws Exception {
 		List<Product> productsList = productsDao.readAll();
+
 		productsListView.getItems().clear();
 		for (Product product : productsList) {
-			products.add(product.getBarcode() + " | " + product.getName());
+			HBox hbox = new HBox();
+			String productDetails = product.getBarcode() + " | " + product.getName();
+			Button editar = new Button("Editar");
+			Button eliminar = new Button("Eliminar");
+			eliminar.setId(product.getBarcode());
+
+//			editar.setOnAction(e -> {})
+			eliminar.setOnAction(e -> {
+				try {
+					removeProductButton(product.getBarcode());
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			});
+
+			hbox.setSpacing(30);
+			hbox.getChildren().addAll(new Pane(new Label(productDetails)), new Pane(editar), new Pane(eliminar));
+
+			interactiveElements.add(hbox);
 		}
-		productsListView.setItems(products);
+
+		productsListView.setItems(interactiveElements);
 	}
 
-	@FXML
-	private void removeProductButton() throws Exception {
-		String barcode = userInput("Eliminar Producto", "ingresa el codigo de barras del producto a eliminar");
+	private void removeProductButton(String barcode) throws Exception {
 		productsDao.delete(barcode);
-		productsDao.readAll().forEach(System.out::println);
 		insertProductList();
 	}
 
