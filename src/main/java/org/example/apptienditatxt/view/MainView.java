@@ -9,16 +9,23 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MainView extends Application {
+
+    double screenWidth = Screen.getPrimary().getBounds().getWidth();
+    double screenHeight = Screen.getPrimary().getBounds().getHeight();
+
     @Override
     public void start(Stage stage) throws IOException {
-        double screenWidth = Screen.getPrimary().getBounds().getWidth();
-        double screenHeight = Screen.getPrimary().getBounds().getHeight();
-        System.out.println(screenWidth);
-        System.out.println(screenHeight);
+
+        System.out.println("stage = " + stage);
+
+        /*___FXML___*/
         FXMLLoader fxmlLoader = new FXMLLoader(MainView.class.getResource("main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+
+        /*___WINDOW___*/
+        Scene scene = new Scene(fxmlLoader.load(), 1536, 864);
+        stage.setTitle("Gabo's Store");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
