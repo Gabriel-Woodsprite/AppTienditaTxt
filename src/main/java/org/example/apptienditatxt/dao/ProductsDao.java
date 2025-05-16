@@ -1,134 +1,106 @@
 package org.example.apptienditatxt.dao;
 
-import javafx.scene.control.Alert;
 import org.example.apptienditatxt.interfaces.*;
-import org.example.apptienditatxt.model.Product;
 
 import java.io.*;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static org.example.apptienditatxt.utils.UserMessage.message;
-
-public class ProductsDao implements DaoInterface {
+public class ProductsDao implements ProductDaoInterface {
+	String path = "productos";
 
 	//////////////////
 	//////CREATE//////
 	//////////////////
 	@Override
-	public void createItem(String path, List<Product> productos) throws Exception {
-		File file = new File(path);
-		PrintWriter writer = new PrintWriter(file);
-		for (Product producto : productos) {
-			String salida = producto.getBarcode() + ", " +
-					producto.getName() + ", " +
-					producto.getBrand() + ", " +
-					producto.getDescription() + ", " +
-					producto.getCategory() + ", " +
-					producto.getMeasurementUnit() + ", " +
-					producto.getContent() + ", " +
-					producto.getPresentacion() + ", " +
-					producto.isActive() + ", " +
-					producto.getImage();
-			writer.println(salida);
-			writer.flush();
-		}
-		writer.close();
+	public void create(org.example.apptienditatxt.model.Product product) throws Exception {
+		List<org.example.apptienditatxt.model.Product> products = readAll();
+		products.add(product);
+		saveAll(products);
 	}
 
 	///////////////////
 	///////READ////////
 	///////////////////
 	@Override
-	public Product readItem(String line) {
-		Product producto = new Product();
-		String[] items = line.split(", ");
-		for (int i = 0; i < items.length; i++) {
-			producto.setBarcode(items[0]);
-			producto.setName(items[1]);
-			producto.setBrand(items[2]);
-			producto.setDescription(items[3]);
-			producto.setCategory(items[4]);
-			producto.setMeasurementUnit(items[5]);
-			producto.setContent(items[6]);
-			producto.setPresentacion(items[7]);
-			producto.setActive(Boolean.parseBoolean(items[8]));
-			producto.setImage(items[9]);
-		}
-		return producto;
+	public org.example.apptienditatxt.model.Product read(String barcode) throws Exception {
+		return readAll().stream()
+				.filter(p -> p.getBarcode().equals(barcode))
+				.findFirst()
+				.orElse(null);
 	}
 
 	///////////////////
 	//////READ ALL/////
 	///////////////////
 	@Override
-	public List<Product> readAllItems(String path) {
-		InputStream inputStream = ProductsDao.class.getClassLoader().getResourceAsStream(path);
-		if (inputStream != null) {
-			Scanner entrada = new Scanner(inputStream);
-			List<Product> data = new ArrayList<>();
-			while (entrada.hasNext()) {
-				String line = entrada.nextLine();
-				data.add(readItem(line));
-			}
-			entrada.close();
-			return data;
-		}
-		System.out.println("No se encontro el archivo");
+	public List<org.example.apptienditatxt.model.Product> readAll() throws Exception {
+		File file = new File(path);
+		if (!file.exists()) return new ArrayList<>();
 
-		return null;
+		List<org.example.apptienditatxt.model.Product> products = new ArrayList<>();
+		try (Scanner scanner = new Scanner(file)) {
+			while (scanner.hasNextLine()) {
+				products.add(parseLine(scanner.nextLine()));
+			}
+		}
+		return products;
 	}
 
 	///////////////////
 	//////UPDATE///////
 	///////////////////
 	@Override
-	public void updateItem() {
+	public void update(String barcode, org.example.apptienditatxt.model.Product updatedProduct) throws Exception {
+		List<org.example.apptienditatxt.model.Product> all = readAll();
+		for (int i = 0; i < all.size(); i++) {
+			if (all.get(i).getBarcode().equals(barcode)) {
+				all.set(i, updatedProduct);
+				break;
+			}
+		}
+		saveAll(all);
 	}
 
 	///////////////////
 	//////DELETE///////
 	///////////////////
-
 	@Override
-	public void deleteItem() {
-
+	public void delete(String barcode) throws Exception {
+		List<org.example.apptienditatxt.model.Product> all = readAll();
+		all.removeIf(p -> p.getBarcode().equals(barcode));
+		saveAll(all);
 	}
 
-	public static void saveData(String path, List<Product> catalogue) {
-		try {
-			URL resourceUrl = ProductsDao.class.getClassLoader().getResource(path);
-
-			if (resourceUrl == null) {
-				throw new FileNotFoundException("Archivo no encontrado" + path);
+	///////////////////
+	//////SAVE ALL/////
+	///////////////////
+	private void saveAll(List<org.example.apptienditatxt.model.Product> products) throws Exception {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+			for (org.example.apptienditatxt.model.Product p : products) {
+				writer.write(String.join(",",
+						p.getBarcode(), p.getName(), p.getBrand(), p.getDescription(),
+						p.getCategory(), p.getMeasurementUnit(), p.getContent(),
+						p.getPresentacion(), String.valueOf(p.isActive()), p.getImage()));
+				writer.newLine();
 			}
-
-			File file = new File(resourceUrl.toURI());
-
-			try (BufferedWriter writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING)) {
-				for (Product producto : catalogue) {
-					writer.write(String.format(
-							"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s%n",
-							producto.getBarcode(),
-							producto.getName(),
-							producto.getBrand(),
-							producto.getDescription(),
-							producto.getCategory(),
-							producto.getMeasurementUnit(),
-							producto.getContent(),
-							producto.getPresentacion(),
-							producto.isActive(),
-							producto.getImage()));
-				}
-			}
-			message("Salida", "Datos guardados exitosamente", Alert.AlertType.INFORMATION);
-		} catch (Exception e) {
-			message("Error", "Hubo un error al guardar datos del archivo" + e.getMessage(), Alert.AlertType.ERROR);
 		}
+	}
+
+	private org.example.apptienditatxt.model.Product parseLine(String line) {
+		String[] tokens = line.split(",");
+		org.example.apptienditatxt.model.Product p = new org.example.apptienditatxt.model.Product();
+		p.setBarcode(tokens[0]);
+		p.setName(tokens[1]);
+		p.setBrand(tokens[2]);
+		p.setDescription(tokens[3]);
+		p.setCategory(tokens[4]);
+		p.setMeasurementUnit(tokens[5]);
+		p.setContent(tokens[6]);
+		p.setPresentacion(tokens[7]);
+		p.setActive(Boolean.parseBoolean(tokens[8]));
+		p.setImage(tokens[9]);
+		return p;
 	}
 }
