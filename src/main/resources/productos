@@ -1,18 +1,13 @@
-123456789012300, Coca-Cola, Coca-Cola, Refresco de cola, Bebidas, Litros, 1.5, Botella,false, https://example.com/coca-cola.jpg
 234567890123400, Fanta Naranja, Coca-Cola, Refresco de naranja, Bebidas, Litros, 2.0, Botella,false, https://example.com/fanta.jpg
-345678901234500, Pepsi, PepsiCo, Refresco de cola, Bebidas, Litros, 1.5, Botella,false, https://example.com/pepsi.jpg
 456789012345600, Red Bull, Red Bull, Bebida energética, Bebidas, Litros, 0.25, Lata,false, https://example.com/redbull.jpg
-567890123456700, Nestlé Leche, Nestlé, Leche líquida entera, Comestibles, Litros, 1.0, Botella,false, https://example.com/nestle_leche.jpg
 678901234567800, Jugo de Naranja Santa Clara, Santa Clara, Jugo de naranja, Comestibles, Litros, 1.0, Botella,false, https://example.com/jugo_naranja.jpg
 789012345678900, Galletas Oreo, Mondelez, Galletas rellenas de crema, Comestibles, Unidades, 10.0, Caja,false, https://example.com/oreo.jpg
 890123456789000, Cereal Kellogg's Corn Flakes, Kellogg's, Cereal de maíz, Comestibles, Kilogramos, 0.5, Caja,false, https://example.com/cereal.jpg
 901234567890100, Arroz Basmati, Tilda, Arroz largo, Comestibles, Kilogramos, 1.0, Bolsa,false, https://example.com/arroz.jpg
 012345678901200, Papel Higiénico Elite, Kimberly-Clark, Papel higiénico, Higiene, Unidades, 12.0, Paquete,false, https://example.com/papel.jpg
 112233445566700, Aspirina Bayer, Bayer, Analgésico para dolores, Salud, Unidades, 10.0, Caja,false, https://example.com/aspirina.jpg
-223344556677800, Cepillo Colgate, Colgate, Cepillo de dientes, Higiene, Unidades, 1.0, Caja,false, https://example.com/cepillo.jpg
 334455667788900, Pasta Dental Sensodyne, GlaxoSmithKline, Pasta dental para dientes sensibles, Higiene, Unidades, 1.0, Tubo,false, https://example.com/pasta.jpg
 445566778899000, Shampoo Head & Shoulders, Procter & Gamble, Shampoo anticaspa, Higiene, Litros, 0.4, Botella,false, https://example.com/shampoo.jpg
-556677889900100, Detergente Ariel, Procter & Gamble, Detergente en polvo, Hogar, Kilogramos, 1.0, Caja,false, https://example.com/detergente.jpg
 778899001122300, Cerveza Corona, Grupo Modelo, Cerveza tipo lager, Bebidas, Litros, 0.33, Botella,false, https://example.com/cerveza.jpg
 889900112233400, Vino Tinto Montes Alpha, Montes, Vino tinto chileno, Bebidas, Litros, 0.75, Botella,false, https://example.com/vino.jpg
 990011223344500, Aceite de Oliva Borges, Borges, Aceite de oliva extra virgen, Comestibles, Litros, 1.0, Botella,false, https://example.com/aceite.jpg
