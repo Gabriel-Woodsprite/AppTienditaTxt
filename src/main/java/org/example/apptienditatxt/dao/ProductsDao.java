@@ -1,21 +1,21 @@
 package org.example.apptienditatxt.dao;
 
 import org.example.apptienditatxt.interfaces.*;
-
+import org.example.apptienditatxt.model.Product;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class ProductsDao implements ProductDaoInterface {
-	String path = "productos";
+	String path = "src/main/resources/productos";
 
 	//////////////////
 	//////CREATE//////
 	//////////////////
 	@Override
-	public void create(org.example.apptienditatxt.model.Product product) throws Exception {
-		List<org.example.apptienditatxt.model.Product> products = readAll();
+	public void create(Product product) throws Exception {
+		List<Product> products = readAll();
 		products.add(product);
 		saveAll(products);
 	}
@@ -24,7 +24,7 @@ public class ProductsDao implements ProductDaoInterface {
 	///////READ////////
 	///////////////////
 	@Override
-	public org.example.apptienditatxt.model.Product read(String barcode) throws Exception {
+	public Product read(String barcode) throws Exception {
 		return readAll().stream()
 				.filter(p -> p.getBarcode().equals(barcode))
 				.findFirst()
@@ -35,11 +35,11 @@ public class ProductsDao implements ProductDaoInterface {
 	//////READ ALL/////
 	///////////////////
 	@Override
-	public List<org.example.apptienditatxt.model.Product> readAll() throws Exception {
+	public List<Product> readAll() throws Exception {
 		File file = new File(path);
 		if (!file.exists()) return new ArrayList<>();
 
-		List<org.example.apptienditatxt.model.Product> products = new ArrayList<>();
+		List<Product> products = new ArrayList<>();
 		try (Scanner scanner = new Scanner(file)) {
 			while (scanner.hasNextLine()) {
 				products.add(parseLine(scanner.nextLine()));
@@ -52,8 +52,8 @@ public class ProductsDao implements ProductDaoInterface {
 	//////UPDATE///////
 	///////////////////
 	@Override
-	public void update(String barcode, org.example.apptienditatxt.model.Product updatedProduct) throws Exception {
-		List<org.example.apptienditatxt.model.Product> all = readAll();
+	public void update(String barcode, Product updatedProduct) throws Exception {
+		List<Product> all = readAll();
 		for (int i = 0; i < all.size(); i++) {
 			if (all.get(i).getBarcode().equals(barcode)) {
 				all.set(i, updatedProduct);
@@ -68,7 +68,7 @@ public class ProductsDao implements ProductDaoInterface {
 	///////////////////
 	@Override
 	public void delete(String barcode) throws Exception {
-		List<org.example.apptienditatxt.model.Product> all = readAll();
+		List<Product> all = readAll();
 		all.removeIf(p -> p.getBarcode().equals(barcode));
 		saveAll(all);
 	}
@@ -76,9 +76,9 @@ public class ProductsDao implements ProductDaoInterface {
 	///////////////////
 	//////SAVE ALL/////
 	///////////////////
-	private void saveAll(List<org.example.apptienditatxt.model.Product> products) throws Exception {
+	private void saveAll(List<Product> products) throws Exception {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-			for (org.example.apptienditatxt.model.Product p : products) {
+			for (Product p : products) {
 				writer.write(String.join(",",
 						p.getBarcode(), p.getName(), p.getBrand(), p.getDescription(),
 						p.getCategory(), p.getMeasurementUnit(), p.getContent(),
@@ -88,9 +88,9 @@ public class ProductsDao implements ProductDaoInterface {
 		}
 	}
 
-	private org.example.apptienditatxt.model.Product parseLine(String line) {
+	private Product parseLine(String line) {
 		String[] tokens = line.split(",");
-		org.example.apptienditatxt.model.Product p = new org.example.apptienditatxt.model.Product();
+		Product p = new org.example.apptienditatxt.model.Product();
 		p.setBarcode(tokens[0]);
 		p.setName(tokens[1]);
 		p.setBrand(tokens[2]);

@@ -1,6 +1,10 @@
 package org.example.apptienditatxt.utils;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.TextInputDialog;
+
+import java.util.Optional;
 
 public class UserMessage {
 	public static Alert message(String titulo, String message, Alert.AlertType alertType){
@@ -10,5 +14,14 @@ public class UserMessage {
 		alerta.setContentText(message);
 		alerta.showAndWait();
 		return alerta;
+	}
+	public static String userInput(String titulo, String message){
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setTitle(titulo);
+		dialog.setHeaderText(null);
+		dialog.setContentText(message);
+
+		dialog.showAndWait();
+		return dialog.getEditor().getText();
 	}
 }

@@ -41,7 +41,7 @@
                            <children>
                               <ScrollPane prefHeight="200.0" prefWidth="760.0" styleClass="border_maker_blue" stylesheets="@css/Style.css">
                                  <content>
-                                    <ListView prefHeight="759.0" prefWidth="756.0" />
+                                    <ListView prefHeight="759.0" prefWidth="756.0" fx:id="productsListView"/>
                                  </content>
                               </ScrollPane>
                               <Pane prefHeight="200.0" prefWidth="760.0" styleClass="border_maker" stylesheets="@css/Style.css">
@@ -50,7 +50,7 @@
                                        <children>
                                           <Button layoutX="224.0" layoutY="357.0" mnemonicParsing="false" styleClass="border_maker" stylesheets="@css/Style.css" text="edit" />
                                           <Button layoutX="160.0" layoutY="357.0" mnemonicParsing="false" styleClass="border_maker" stylesheets="@css/Style.css" text="add" />
-                                          <Button layoutX="75.0" layoutY="357.0" mnemonicParsing="false" styleClass="border_maker" stylesheets="@css/Style.css" text="remove" />
+                                          <Button layoutX="75.0" layoutY="357.0" mnemonicParsing="false" styleClass="border_maker" stylesheets="@css/Style.css" text="remove" onAction="#removeProductButton" />
                                        </children>
                                     </Pane>
                                     <Pane layoutX="4.0" layoutY="428.0" prefHeight="345.0" prefWidth="753.0" styleClass="border_maker_blue" stylesheets="@css/Style.css" />
